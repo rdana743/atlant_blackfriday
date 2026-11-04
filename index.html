@@ -8,9 +8,11 @@
 <meta property="og:title" content="Новые зубы со скидкой −30% · Чёрная пятница 11.11">
 <meta property="og:description" content="Коронки, виниры и протезы в Тюмени по ценам Чёрной пятницы. Бронируйте цену до 11 ноября.">
 <meta name="theme-color" content="#0A0A0C">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="https://atlanttumen.ru/upload/CAllcorp3Medc/73c/xrgn0d0kh6w5lsv8p20od8glu134o1wp.png">
+<link rel="preconnect" href="https://atlanttumen.ru" crossorigin>
+<link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/unbounded-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://atlanttumen.ru/upload/CAllcorp3Medc/73c/xrgn0d0kh6w5lsv8p20od8glu134o1wp.png" as="image">
 
 <script>
 /* ===================== НАСТРОЙКИ ===================== */
@@ -23,11 +25,16 @@ window.LANDING = {
   phoneView: '+7 (3452) 57-46-37',
   endpoint: '',                               // URL вебхука для заявок (CRM / Bitrix24 / n8n / свой PHP). Пусто = только лог в консоль
   metrikaId: null,                            // ID счётчика Яндекс Метрики, например 12345678
-  goal: 'lead'                                // имя цели в Метрике
+  vkPixelId: null,                            // ID пикселя VK Рекламы (top.mail.ru), например 3512345
+  privacyUrl: 'https://atlanttumen.ru/include/licenses_detail.php'  // согласие на обработку ПДн
 };
 </script>
 
 <style>
+@font-face{font-family:'Manrope';font-style:normal;font-display:swap;font-weight:200 800;src:url(fonts/manrope-cyrillic-wght-normal.woff2) format('woff2-variations');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Manrope';font-style:normal;font-display:swap;font-weight:200 800;src:url(fonts/manrope-latin-wght-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Unbounded';font-style:normal;font-display:swap;font-weight:200 900;src:url(fonts/unbounded-cyrillic-wght-normal.woff2) format('woff2-variations');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Unbounded';font-style:normal;font-display:swap;font-weight:200 900;src:url(fonts/unbounded-latin-wght-normal.woff2) format('woff2-variations');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 :root{
   --bg:#0A0A0C; --bg2:#111216; --card:#17181D; --line:#2A2B33; --line2:#1F2026;
   --ink:#F7F4EE; --muted:#A3A5AD; --soft:#D2D4DA;
@@ -57,8 +64,9 @@ section{position:relative}
 .btn-ghost{background:transparent;color:var(--ink);border:1px solid #44464E}
 .btn-block{width:100%}
 .btn-lg{font-size:18px;min-height:58px;padding:18px 28px}
-.pulse{animation:pl 2.2s ease-in-out infinite}
-@keyframes pl{0%,100%{box-shadow:0 0 0 0 rgba(255,90,31,.55)}50%{box-shadow:0 0 0 14px rgba(255,90,31,0)}}
+.pulse{position:relative}
+.pulse::after{content:"";position:absolute;inset:-2px;border-radius:inherit;border:2px solid var(--acc);pointer-events:none;animation:pl 2.2s ease-out infinite;will-change:transform,opacity}
+@keyframes pl{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.08,1.3);opacity:0}}
 .card-h{transition:transform .2s,box-shadow .2s}
 .card-h:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.18)}
 :focus-visible{outline:3px solid #3B82F6;outline-offset:2px}
@@ -72,11 +80,11 @@ section{position:relative}
 .topbar .wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 22px;padding-top:10px;padding-bottom:10px;text-align:center}
 .blink{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dark-ink);animation:bk 1s steps(2,start) infinite;margin-right:6px}
 @keyframes bk{to{visibility:hidden}}
-header{position:sticky;top:0;z-index:40;background:rgba(10,10,12,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line2)}
+header{position:sticky;top:0;z-index:40;background:rgba(10,10,12,.98);border-bottom:1px solid var(--line2)}
 header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
-.logo-m{width:42px;height:42px;border-radius:12px;background:var(--blue);display:flex;align-items:center;justify-content:center}
-.logo b{font-family:'Unbounded',sans-serif;font-weight:900;font-size:19px;letter-spacing:.05em;display:block}
+.logo-plate{background:#fff;border-radius:12px;padding:7px 12px;display:flex;align-items:center;height:48px}
+.logo-plate img{height:34px;width:auto;display:block}
 .logo small{font-size:12px;color:var(--muted)}
 .hdr-r{display:flex;align-items:center;gap:14px}
 .hdr-phone{text-align:right}
@@ -142,6 +150,7 @@ header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:spac
 .err{display:none;font-size:13px;color:var(--acc-d);font-weight:700;margin-top:6px}
 .err.on{display:block}
 .agree{font-size:12px;color:#5A5852;margin-top:8px;text-align:center}
+.agree a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 .hp{position:absolute;left:-9999px}
 
 /* бегущая строка */
@@ -295,7 +304,7 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
 .fine{font-size:12px;color:#8C8E96}
 
 /* липкая панель */
-.sticky{position:fixed;left:0;right:0;bottom:0;z-index:45;background:rgba(10,10,12,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:45;background:rgba(10,10,12,.98);border-top:1px solid var(--line)}
 .sticky .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
 .sticky-l{display:flex;align-items:center;gap:12px;font-size:14px}
 .sticky-l i{font-style:normal;background:var(--acc);color:var(--dark-ink);font-family:'Unbounded',sans-serif;font-weight:900;padding:6px 10px;border-radius:10px}
@@ -314,6 +323,9 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
 .m-text{font-size:15px;color:var(--dmuted);margin:10px 0 16px}
 
 .hide{display:none!important}
+/* рендер блоков ниже первого экрана — только при приближении к ним */
+main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:auto 900px}
+.ticker div{will-change:transform}
 
 @media (max-width:720px){
   .sec{padding:56px 0}
@@ -342,10 +354,7 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
 
 <!-- ШАПКА -->
 <header><div class="wrap">
-  <a class="logo" href="#top" aria-label="Стоматология Атлант">
-    <span class="logo-m"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3c-2.5 0-4 2-4 4.5 0 3 1.5 4.5 2 7.5.4 2.6.9 6 2.5 6 1.4 0 1.6-3 2.3-5 .5-1.3 1.2-2 2.2-2s1.7.7 2.2 2c.7 2 .9 5 2.3 5 1.6 0 2.1-3.4 2.5-6 .5-3 2-4.5 2-7.5C21 5 19.5 3 17 3c-2 0-3 1-5 1S9 3 7 3z"/></svg></span>
-    <span><b>АТЛАНТ</b><small>3 клиники в Тюмени</small></span>
-  </a>
+  <a class="logo" href="#top" aria-label="Стоматология «Атлант» — на главную"><span class="logo-plate"><img src="https://atlanttumen.ru/upload/CAllcorp3Medc/73c/xrgn0d0kh6w5lsv8p20od8glu134o1wp.png" width="139" height="34" alt="Стоматология «Атлант»" fetchpriority="high"></span><small>3 клиники<br>в Тюмени</small></a>
   <div class="hdr-r">
     <div class="hdr-phone"><a href="tel:+73452574637" data-phone>+7 (3452) 57-46-37</a><span>● Сейчас принимаем звонки</span></div>
     <button class="btn btn-acc" id="hdrCall" data-modal="call">Перезвоните мне</button>
@@ -404,7 +413,7 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
         <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="err">Введите номер полностью — 10 цифр после +7</div>
         <button class="btn btn-acc btn-lg btn-block pulse" type="submit" style="margin-top:12px">Получить расчёт и подарки</button>
-        <div class="agree">Не передаём номер третьим лицам. Нажимая кнопку, вы соглашаетесь с <a href="https://atlanttumen.ru/include/licenses_detail.php" target="_blank" rel="noopener" style="color:inherit">политикой обработки данных</a></div>
+        <div class="agree">Нажимая кнопку, вы даёте <a href="https://atlanttumen.ru/include/licenses_detail.php" target="_blank" rel="noopener" data-privacy>согласие на обработку персональных данных</a></div>
       </form>
       <div id="qDone" class="done hide">
         <div class="done-ic"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0A0A0C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></div>
@@ -491,7 +500,7 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
         <button class="btn btn-dark" type="submit">Жду звонка</button>
       </div>
       <div class="err">Введите номер полностью — 10 цифр после +7</div>
-      <div class="agree">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</div>
+      <div class="agree">Нажимая кнопку, вы даёте <a href="https://atlanttumen.ru/include/licenses_detail.php" target="_blank" rel="noopener" data-privacy>согласие на обработку персональных данных</a></div>
     </form>
     <div class="okbox hide">Готово! Перезвоним в течение 15 минут в рабочее время.</div>
   </div>
@@ -553,7 +562,7 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
       <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="err">Введите номер полностью — 10 цифр после +7</div>
       <button class="btn btn-acc btn-lg btn-block pulse" type="submit" style="margin-top:12px">Закрепить скидку</button>
-      <div class="agree">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</div>
+      <div class="agree">Нажимая кнопку, вы даёте <a href="https://atlanttumen.ru/include/licenses_detail.php" target="_blank" rel="noopener" data-privacy>согласие на обработку персональных данных</a></div>
     </form>
     <div class="hide" data-ok><div class="t" style="margin-bottom:8px">Скидка закреплена!</div><div style="color:var(--dmuted)">Куратор свяжется с вами в течение 15 минут в рабочее время.</div></div>
     <div class="call">Или позвоните: <a href="tel:+73452574637" data-phone>+7 (3452) 57-46-37</a></div>
@@ -568,9 +577,10 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
     <div><b>Московский тракт, 179 к. 2</b>ИНН 7203511652 · КПП 720301001<br>Лицензия № Л041-01107-72/00327442</div>
   </div>
   <div class="f-links">
-    <div><a href="https://atlanttumen.ru/">atlanttumen.ru</a><a href="https://vk.com/stomatlant">ВКонтакте</a><a href="https://atlanttumen.ru/include/licenses_detail.php">Политика конфиденциальности</a></div>
+    <div><a href="https://atlanttumen.ru/">atlanttumen.ru</a><a href="https://vk.com/stomatlant">ВКонтакте</a><a href="https://atlanttumen.ru/include/licenses_detail.php" target="_blank" rel="noopener" data-privacy>Соглашение на обработку персональных данных</a></div>
     <div>© 2026 Сеть клиник дентальной имплантации «Атлант»</div>
   </div>
+  <a href="#top" class="logo-plate" style="align-self:flex-start;height:56px" aria-label="Наверх"><img src="https://atlanttumen.ru/upload/CAllcorp3Medc/73c/xrgn0d0kh6w5lsv8p20od8glu134o1wp.png" width="164" height="40" alt="Стоматология «Атлант»" loading="lazy" style="height:40px"></a>
   <div class="contra">ИМЕЮТСЯ ПРОТИВОПОКАЗАНИЯ. НЕОБХОДИМА КОНСУЛЬТАЦИЯ СПЕЦИАЛИСТА</div>
   <div class="fine">Сайт носит информационный характер и не является публичной офертой (ст. 437 ГК РФ). Условия акции и итоговая стоимость уточняются у администратора.</div>
 </div></footer>
@@ -596,7 +606,7 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
       <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="err">Введите номер полностью — 10 цифр после +7</div>
       <button class="btn btn-acc btn-lg btn-block pulse" type="submit" style="margin-top:12px" id="mBtn">Отправить</button>
-      <div class="agree">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</div>
+      <div class="agree">Нажимая кнопку, вы даёте <a href="https://atlanttumen.ru/include/licenses_detail.php" target="_blank" rel="noopener" data-privacy>согласие на обработку персональных данных</a></div>
     </form>
     <div class="done hide" data-ok>
       <div class="done-ic" style="width:60px;height:60px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A0A0C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></div>
@@ -622,6 +632,36 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
     var v = params.get(k); if (v) { utm[k] = v; try { sessionStorage.setItem(k, v); } catch(e){} }
     else { try { var s = sessionStorage.getItem(k); if (s) utm[k] = s; } catch(e){} }
   });
+
+
+  /* ===================== АНАЛИТИКА =====================
+     Все события уходят в: Яндекс Метрику (reachGoal), dataLayer (GTM), VK Рекламу (_tmr).
+     Отладка: откройте страницу с ?debug=1 — события будут видны в консоли. */
+  var DEBUG = /[?&]debug=1/.test(location.search), fired = {};
+  window.dataLayer = window.dataLayer || [];
+  if (C.metrikaId) {
+    window.ym = window.ym || function(){ (window.ym.a = window.ym.a || []).push(arguments); }; window.ym.l = +new Date();
+    ym(C.metrikaId, 'init', { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, params: utm });
+  }
+  if (C.vkPixelId) { window._tmr = window._tmr || []; _tmr.push({ id: String(C.vkPixelId), type: 'pageView', start: +new Date() }); }
+  function track(goal, params, onceKey){
+    if (onceKey) { if (fired[onceKey]) return; fired[onceKey] = 1; }
+    params = params || {};
+    if (DEBUG) console.log('%c[goal] ' + goal, 'color:#FF5A1F;font-weight:700', params);
+    try { if (C.metrikaId) ym(C.metrikaId, 'reachGoal', goal, params); } catch(e){}
+    try { dataLayer.push(Object.assign({ event: goal }, params)); } catch(e){}
+    try { if (C.vkPixelId) _tmr.push({ type: 'reachGoal', id: String(C.vkPixelId), goal: goal, value: params.value }); } catch(e){}
+  }
+  window.trackGoal = track;
+  // сторонние скрипты грузим после отрисовки страницы — не тормозят первый экран
+  function loadTrackers(){
+    if (loadTrackers.done) return; loadTrackers.done = true;
+    var add = function(src){ var s = document.createElement('script'); s.async = true; s.src = src; document.head.appendChild(s); };
+    if (C.metrikaId) add('https://mc.yandex.ru/metrika/tag.js');
+    if (C.vkPixelId) add('https://top-fwz1.mail.ru/js/code.js');
+  }
+  ['pointerdown','keydown','scroll','touchstart'].forEach(function(ev){ addEventListener(ev, loadTrackers, { once:true, passive:true }); });
+  addEventListener('load', function(){ setTimeout(loadTrackers, 2500); });
 
   /* ---------- статика ---------- */
   $$('[data-d]').forEach(function(el){ el.textContent = D; });
@@ -661,7 +701,7 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
   var okPhone = function(v){ return String(v).replace(/\D/g,'').length === 11; };
   $$('[data-mask]').forEach(function(i){
     i.addEventListener('input', function(){ i.value = mask(i.value); i.classList.remove('bad'); var e = i.closest('form').querySelector('.err'); if (e) e.classList.remove('on'); });
-    i.addEventListener('focus', function(){ if (!i.value) i.value = '+7 ('; });
+    i.addEventListener('focus', function(){ if (!i.value) i.value = '+7 ('; var f = i.closest('form'); track('phone_focus', { form: f ? f.dataset.form : '' }, 'pf:' + (f ? f.dataset.form : '')); });
     i.addEventListener('blur', function(){ if (i.value === '+7 (') i.value = ''; });
   });
 
@@ -673,22 +713,22 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
       phone: data.phone, source: data.source, details: data.details || '',
       discount: D + '%', page: location.href, referrer: document.referrer, created: new Date().toISOString()
     }, utm);
-    try { if (C.metrikaId && window.ym) ym(C.metrikaId, 'reachGoal', C.goal, { form: data.source }); } catch(e){}
-    try { if (window.dataLayer) dataLayer.push({ event: 'lead', form: data.source }); } catch(e){}
+    track('lead', { form: data.source, form_context: data.context || '', discount: D });
     if (!C.endpoint) { console.log('[lead]', payload); return Promise.resolve(); }
     return fetch(C.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), keepalive: true })
       .catch(function(){ /* не мешаем пользователю, если вебхук недоступен */ });
   }
 
-  var modalCtx = '';
+  var modalCtx = '', modalSrc = '';
   function bindForm(form, getDetails, onOk){
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
       var hp = form.querySelector('.hp'); if (hp && hp.value) return; // антиспам
       var inp = form.querySelector('[data-mask]'), err = form.querySelector('.err');
-      if (!okPhone(inp.value)) { inp.classList.add('bad'); err.classList.add('on'); inp.focus(); return; }
+      if (!okPhone(inp.value)) { inp.classList.add('bad'); err.classList.add('on'); inp.focus(); track('phone_error', { form: form.dataset.form }); return; }
       var btn = form.querySelector('[type=submit]'); btn.disabled = true;
-      sendLead({ phone: inp.value, source: form.dataset.form, details: getDetails ? getDetails() : '' }).then(function(){
+      var det = getDetails ? getDetails() : '';
+      sendLead({ phone: inp.value, source: form.dataset.form === 'modal' ? 'modal:' + modalSrc : form.dataset.form, context: form.dataset.form === 'modal' ? modalSrc : form.dataset.form, details: det }).then(function(){
         btn.disabled = false; onOk();
       });
     });
@@ -701,8 +741,9 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
     book: ['Чёрная пятница · 11.11', 'Забронируйте скидку −'+D+'%', 'Скидка закрепится за вашим номером. В подарок: КТ, консультация ортопеда и план лечения.', 'Забронировать скидку'],
     exit: ['Подождите!', 'Не уходите без своей скидки −'+D+'%', 'Оставьте номер — пришлём расчёт стоимости, чтобы было с чем сравнить. Скидка сохранится до 11.11.', 'Сохранить скидку']
   };
-  function openModal(p, ctx){
-    modalCtx = ctx || p[1];
+  function openModal(p, ctx, src){
+    modalCtx = ctx || p[1]; modalSrc = src || ctx || 'modal';
+    track('form_open', { form: 'modal', form_context: modalSrc });
     $('#mBadge').textContent = p[0]; $('#mTitle').textContent = p[1]; $('#mText').textContent = p[2]; $('#mBtn').textContent = p[3];
     mForm.classList.remove('hide'); mOk.classList.add('hide');
     lastFocus = document.activeElement;
@@ -713,13 +754,13 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
   modal.addEventListener('click', function(e){ if (e.target === modal || e.target.hasAttribute('data-close')) closeModal(); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.classList.contains('on')) closeModal(); });
   document.addEventListener('click', function(e){
-    var t = e.target.closest('[data-modal]'); if (t) { e.preventDefault(); openModal(PRESETS[t.dataset.modal], t.dataset.modal); }
+    var t = e.target.closest('[data-modal]'); if (t) { e.preventDefault(); openModal(PRESETS[t.dataset.modal], t.dataset.modal, t.dataset.modal + (t.closest('.sticky') ? '_sticky' : t.closest('header') ? '_header' : '')); }
   });
   bindForm(mForm, function(){ return modalCtx; }, function(){ mForm.classList.add('hide'); mOk.classList.remove('hide'); });
 
   // exit-intent (десктоп) + возврат к вкладке через 40 сек бездействия на мобильных
   var exitShown = false;
-  function tryExit(){ if (exitShown || leadSent || modal.classList.contains('on')) return; exitShown = true; openModal(PRESETS.exit, 'exit-intent'); }
+  function tryExit(){ if (exitShown || leadSent || modal.classList.contains('on')) return; exitShown = true; track('exit_intent'); openModal(PRESETS.exit, 'exit-intent', 'exit'); }
   document.addEventListener('mouseout', function(e){ if (!e.relatedTarget && e.clientY <= 5) tryExit(); });
   if (matchMedia('(pointer:coarse)').matches) setTimeout(tryExit, 45000);
 
@@ -735,7 +776,7 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
   }).join('');
   $('#cases').addEventListener('click', function(e){
     var b = e.target.closest('[data-case]'); if (!b) return; var c = cases[+b.dataset.case];
-    openModal(['Ваша ситуация', c[1]+': узнайте точную цену', 'Врач-ортопед перезвонит, задаст пару вопросов и назовёт стоимость с учётом скидки '+D+'%.', 'Узнать цену со скидкой'], 'Ситуация: '+c[1]);
+    openModal(['Ваша ситуация', c[1]+': узнайте точную цену', 'Врач-ортопед перезвонит, задаст пару вопросов и назовёт стоимость с учётом скидки '+D+'%.', 'Узнать цену со скидкой'], 'Ситуация: '+c[1], 'situation');
   });
 
   /* ---------- прайс ---------- */
@@ -755,7 +796,7 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
   $('#calc').insertAdjacentHTML('beforebegin', html);
   $('#priceGrid').addEventListener('click', function(e){
     var b = e.target.closest('[data-item]'); if (!b) return; var it = items[+b.dataset.item], n = fmt(price(it[2]));
-    openModal(['Цена 11.11: '+n+' ₽', it[0]+' за '+n+' ₽', 'Оставьте номер — закрепим цену Чёрной пятницы за вами. Начать лечение можно позже.', 'Забронировать за '+n+' ₽'], 'Прайс: '+it[0]);
+    openModal(['Цена 11.11: '+n+' ₽', it[0]+' за '+n+' ₽', 'Оставьте номер — закрепим цену Чёрной пятницы за вами. Начать лечение можно позже.', 'Забронировать за '+n+' ₽'], 'Прайс: '+it[0], 'price');
   });
 
   /* ---------- калькулятор ---------- */
@@ -768,11 +809,12 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
     $('#cBtn').textContent = 'Зафиксировать ' + fmt(o-nw) + ' ₽ выгоды';
   }
   $$('[data-mat]').forEach(function(b){ b.addEventListener('click', function(){ cMat = +b.dataset.mat; $$('[data-mat]').forEach(function(x){ x.classList.toggle('sel', x===b); }); calc(); }); });
+  $('#calc').addEventListener('click', function(e){ if (e.target.closest('button') && !e.target.closest('#cBtn')) track('calc_use', {}, 'calc'); });
   $('#cInc').addEventListener('click', function(){ cN = Math.min(28, cN+1); calc(); });
   $('#cDec').addEventListener('click', function(){ cN = Math.max(1, cN-1); calc(); });
   $('#cBtn').addEventListener('click', function(){
     var o = cMat*cN, nw = price(cMat)*cN, mat = cMat===25000?'металлокерамика':'цирконий/E.max';
-    openModal(['Ваша выгода: '+fmt(o-nw)+' ₽', cN+' '+word(cN)+' за '+fmt(nw)+' ₽', 'Оставьте номер — закрепим эту цену за вами и пригласим на бесплатную консультацию с КТ.', 'Зафиксировать выгоду'], 'Калькулятор: '+cN+' шт, '+mat+', '+fmt(nw)+' ₽');
+    openModal(['Ваша выгода: '+fmt(o-nw)+' ₽', cN+' '+word(cN)+' за '+fmt(nw)+' ₽', 'Оставьте номер — закрепим эту цену за вами и пригласим на бесплатную консультацию с КТ.', 'Зафиксировать выгоду'], 'Калькулятор: '+cN+' шт, '+mat+', '+fmt(nw)+' ₽', 'calc');
   });
   calc();
 
@@ -797,12 +839,12 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
   ];
   var silhouette = '<svg width="62%" viewBox="0 0 100 110" fill="#C7BFAC" aria-hidden="true"><circle cx="50" cy="34" r="22"/><path d="M8 110c4-28 22-42 42-42s38 14 42 42z"/></svg>';
   $('#docs').innerHTML = docs.map(function(d, i){
-    return '<div class="doc card-h"><div class="doc-ph">'+(d.badge?'<span class="badge">★ '+esc(d.badge)+'</span>':'')+(d.photo?'<img src="'+esc(d.photo)+'" alt="'+esc(d.name)+'" loading="lazy">':silhouette)+'</div>'+
+    return '<div class="doc card-h"><div class="doc-ph">'+(d.badge?'<span class="badge">★ '+esc(d.badge)+'</span>':'')+(d.photo?'<img src="'+esc(d.photo)+'" alt="'+esc(d.name)+'" width="400" height="500" loading="lazy" decoding="async">':silhouette)+'</div>'+
       '<div class="doc-b"><div><b>'+esc(d.name)+'</b><br><span>'+esc(d.role)+'</span></div><button type="button" class="btn btn-dark" data-doc="'+i+'">Записаться к врачу</button></div></div>';
   }).join('');
   $('#docs').addEventListener('click', function(e){
     var b = e.target.closest('[data-doc]'); if (!b) return; var d = docs[+b.dataset.doc];
-    openModal(['Запись к врачу', 'Запись к врачу: '+d.name.split(' ').slice(0,2).join(' '), 'Оставьте номер — администратор подберёт удобное время и закрепит за вами скидку '+D+'%.', 'Записаться со скидкой'], 'Врач: '+d.name);
+    openModal(['Запись к врачу', 'Запись к врачу: '+d.name.split(' ').slice(0,2).join(' '), 'Оставьте номер — администратор подберёт удобное время и закрепит за вами скидку '+D+'%.', 'Записаться со скидкой'], 'Врач: '+d.name, 'doctor');
   });
 
   /* ---------- до/после (добавьте before/after: 'img/...jpg') ---------- */
@@ -817,20 +859,21 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
   ];
   $('#works').innerHTML = works.map(function(w, i){
     return '<button type="button" class="ba ba-one" data-work="'+i+'" aria-label="Открыть кейс: '+esc(w.title)+'">'+
-      '<div class="ba-img"><img src="'+w.img+'" alt="До и после: '+esc(w.title)+'" loading="lazy"><em class="l">ДО</em><em class="r">ПОСЛЕ</em></div>'+
+      '<div class="ba-img"><img src="'+w.img+'" alt="До и после: '+esc(w.title)+'" width="1200" height="400" loading="lazy" decoding="async"><em class="l">ДО</em><em class="r">ПОСЛЕ</em></div>'+
       '<div class="ba-t"><b>'+esc(w.title)+'</b><span>'+esc(w.doc)+'</span></div></button>';
   }).join('');
   // лайтбокс
-  var lb = document.createElement('div'); lb.className = 'lb'; lb.innerHTML = '<button type="button" class="m-x" aria-label="Закрыть">×</button><img alt=""><div class="lb-c"></div><button type="button" class="btn btn-acc lb-btn">Хочу такой же результат</button>';
+  var lb = document.createElement('div'); lb.className = 'lb'; lb.innerHTML = '<button type="button" class="m-x" aria-label="Закрыть">×</button><img alt="" decoding="async"><div class="lb-c"></div><button type="button" class="btn btn-acc lb-btn">Хочу такой же результат</button>';
   document.body.appendChild(lb);
   var lbIdx = 0;
   $('#works').addEventListener('click', function(e){
     var b = e.target.closest('[data-work]'); if (!b) return; lbIdx = +b.dataset.work; var w = works[lbIdx];
     lb.querySelector('img').src = w.img; lb.querySelector('img').alt = 'До и после: ' + w.title;
     lb.querySelector('.lb-c').textContent = w.title + ' · ' + w.doc; lb.classList.add('on'); document.body.style.overflow = 'hidden';
+    track('case_open', { case_title: w.title });
   });
   lb.addEventListener('click', function(e){
-    if (e.target.closest('.lb-btn')) { lb.classList.remove('on'); var w = works[lbIdx]; openModal(['Как в кейсе', 'Хочу такой же результат', 'Оставьте номер — врач оценит вашу ситуацию на бесплатной консультации и закрепит скидку '+D+'%.', 'Записаться со скидкой'], 'Кейс: '+w.title); return; }
+    if (e.target.closest('.lb-btn')) { lb.classList.remove('on'); var w = works[lbIdx]; openModal(['Как в кейсе', 'Хочу такой же результат', 'Оставьте номер — врач оценит вашу ситуацию на бесплатной консультации и закрепит скидку '+D+'%.', 'Записаться со скидкой'], 'Кейс: '+w.title, 'case'); return; }
     if (e.target === lb || e.target.closest('.m-x')) { lb.classList.remove('on'); document.body.style.overflow = ''; }
   });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && lb.classList.contains('on')) { lb.classList.remove('on'); document.body.style.overflow = ''; } });
@@ -844,7 +887,9 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
     ['Больно ли ставить коронку?','Все манипуляции проводятся под современной анестезией. Обычно пациенты чувствуют только лёгкое давление.'],
     ['Суммируется ли скидка с другими акциями?','Условия совмещения с социальными скидками и другими акциями уточняйте у администратора при записи.']
   ];
-  $('#faq').innerHTML = faq.map(function(f, i){ return '<details'+(i===0?' open':'')+'><summary>'+f[0]+'<i aria-hidden="true">+</i></summary><p>'+f[1]+'</p></details>'; }).join('');
+  $('#faq').addEventListener('toggle', function(e){ if (e.target.open && e.target.dataset.i !== '0' || e.target.open && fired.faqInit) track('faq_open', { question: e.target.querySelector('summary').textContent.replace('+','').trim() }); }, true);
+  setTimeout(function(){ fired.faqInit = 1; }, 500);
+  $('#faq').innerHTML = faq.map(function(f, i){ return '<details data-i="'+i+'"'+(i===0?' open':'')+'><summary>'+f[0]+'<i aria-hidden="true">+</i></summary><p>'+f[1]+'</p></details>'; }).join('');
 
   /* ---------- квиз ---------- */
   var Q = [
@@ -873,11 +918,13 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
   $('#qOpts').addEventListener('click', function(e){
     var b = e.target.closest('[data-o]'); if (!b) return;
     answers[step] = Q[step][1][+b.dataset.o]; b.classList.add('sel');
-    if (step === 0) try { if (C.metrikaId && window.ym) ym(C.metrikaId, 'reachGoal', 'quiz_start'); } catch(_){}
+    if (step === 0) track('quiz_start', {}, 'qs');
+    track('quiz_step_' + (step + 1), { answer: answers[step] }, 'qstep' + (step + 1));
+    if (step === 3) track('form_open', { form: 'quiz', form_context: 'quiz' }, 'qform');
     setTimeout(function(){ step++; renderQuiz(); if (step === 4) setTimeout(function(){ $('#qPhone').focus({preventScroll:true}); }, 60); }, 180);
   });
   $('#qBack').addEventListener('click', function(){ step = Math.max(0, step-1); renderQuiz(); });
-  $$('#qCh button').forEach(function(b){ b.addEventListener('click', function(){ channel = b.dataset.ch; $$('#qCh button').forEach(function(x){ x.classList.toggle('sel', x===b); }); }); });
+  $$('#qCh button').forEach(function(b){ b.addEventListener('click', function(){ channel = b.dataset.ch; track('quiz_channel', { channel: channel }); $$('#qCh button').forEach(function(x){ x.classList.toggle('sel', x===b); }); }); });
   bindForm($('#qContact'), function(){
     return Q.map(function(q, i){ return q[0]+' — '+(answers[i]||'—'); }).join('; ') + '; Связь: ' + channel;
   }, function(){ qDone = true; renderQuiz(); });
@@ -888,10 +935,30 @@ footer .wrap{padding-top:44px;padding-bottom:36px;display:flex;flex-direction:co
     bindForm(f, null, function(){ f.classList.add('hide'); var ok = f.parentNode.querySelector('.okbox, [data-ok]'); if (ok) ok.classList.remove('hide'); });
   });
 
-  /* ---------- Яндекс Метрика (подключится, если указан metrikaId) ---------- */
-  if (C.metrikaId) {
-    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
-    ym(C.metrikaId, 'init', { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+  /* ---------- микроконверсии ---------- */
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a'); if (!a) return;
+    var href = a.getAttribute('href') || '';
+    var place = a.closest('header') ? 'header' : a.closest('.sticky') ? 'sticky' : a.closest('#qDone') ? 'quiz_done' : a.closest('.fbox') ? 'final' : a.closest('footer') ? 'footer' : 'page';
+    if (href.indexOf('tel:') === 0) track('click_phone', { place: place });
+    else if (/vk\.com/.test(href)) track('click_vk', { place: place });
+    else if (a.hasAttribute('data-privacy')) track('click_privacy', { place: place });
+    else if (href === '#quiz' || href === '#prices') track('click_cta_scroll', { target: href.slice(1), place: place });
+  });
+  // глубина скролла
+  var sMarks = [25, 50, 75, 90];
+  addEventListener('scroll', function(){
+    var p = (scrollY + innerHeight) / document.documentElement.scrollHeight * 100;
+    sMarks.forEach(function(m){ if (p >= m) track('scroll_' + m, {}, 'sc' + m); });
+  }, { passive: true });
+  // вовлечённость: время на странице, пока вкладка активна
+  var active = 0;
+  setInterval(function(){ if (document.visibilityState === 'visible') { active += 5; if (active === 30) track('engaged_30s'); if (active === 90) track('engaged_90s'); if (active === 180) track('engaged_180s'); } }, 5000);
+  // просмотр ключевых блоков
+  if ('IntersectionObserver' in window) {
+    var views = [['#prices','view_prices'],['#cases','view_situations'],['#docs','view_doctors'],['#works','view_cases'],['#faq','view_faq'],['.final','view_final']];
+    var io = new IntersectionObserver(function(en){ en.forEach(function(x){ if (x.isIntersecting) { track(x.target.dataset.goal, {}, 'v:' + x.target.dataset.goal); io.unobserve(x.target); } }); }, { threshold: 0.35 });
+    views.forEach(function(v){ var el = $(v[0]); if (el) { el.dataset.goal = v[1]; io.observe(el); } });
   }
 })();
 </script>

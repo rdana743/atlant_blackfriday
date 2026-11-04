@@ -671,6 +671,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
   $$('[data-month]').forEach(function(el){ el.textContent = fmt(Math.ceil(price(+el.dataset.month)/12)); });
   $$('a[href^="tel:"]').forEach(function(a){ a.href = 'tel:' + C.phone; });
   $$('[data-phone]').forEach(function(a){ a.textContent = C.phoneView; });
+  if (C.privacyUrl) $$('[data-privacy]').forEach(function(a){ a.href = C.privacyUrl; });
   $('#maxSave').textContent = fmt(37500 - price(37500));
 
   var tick = ['11.11 · −'+D+'% НА ПРОТЕЗИРОВАНИЕ','★','КТ И КОНСУЛЬТАЦИЯ 0 ₽','★','РАССРОЧКА ДО 24 МЕС','★','ЦЕНА ФИКСИРУЕТСЯ В ДОГОВОРЕ','★','ВЕРНЁМ 13% НАЛОГОВЫМ ВЫЧЕТОМ','★'];

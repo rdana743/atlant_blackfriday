@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://atlanttumen.ru" crossorigin>
 <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/unbounded-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="img/logo.webp" as="image" type="image/webp">
+<link rel="preload" href="img/logo-light.webp" as="image" type="image/webp">
 
 <script>
 /* ===================== НАСТРОЙКИ ===================== */
@@ -84,9 +84,9 @@ section{position:relative}
 header{position:sticky;top:0;z-index:40;background:rgba(10,10,12,.98);border-bottom:1px solid var(--line2)}
 header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
-.logo-plate{background:#fff;border-radius:12px;padding:7px 12px;display:flex;align-items:center;height:48px}
-.logo-plate picture{display:block}.logo-plate img{height:34px;width:auto;display:block}
-.logo small{font-size:12px;color:var(--muted)}
+.logo-plate{display:flex;align-items:center;height:48px}
+.logo-plate picture{display:block}.logo-plate img{height:38px;width:auto;display:block}
+.logo small{font-size:12px;color:var(--muted);line-height:1.3;padding-left:14px;border-left:1px solid var(--line)}
 .hdr-r{display:flex;align-items:center;gap:14px}
 .hdr-phone{text-align:right}
 .hdr-phone a{color:var(--ink);text-decoration:none;font-weight:800;font-size:18px;display:block}
@@ -355,7 +355,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
 
 <!-- ШАПКА -->
 <header><div class="wrap">
-  <a class="logo" href="#top" aria-label="Стоматология «Атлант» — на главную"><span class="logo-plate"><picture><source srcset="img/logo.webp" type="image/webp"><img src="img/logo.png" width="140" height="34" alt="Стоматология «Атлант»" fetchpriority="high"></picture></span><small>3 клиники<br>в Тюмени</small></a>
+  <a class="logo" href="#top" aria-label="Стоматология «Атлант» — на главную"><span class="logo-plate"><picture><source srcset="img/logo-light.webp" type="image/webp"><img src="img/logo-light.png" width="156" height="38" alt="Стоматология «Атлант»" fetchpriority="high"></picture></span><small class="logo-sub">3 клиники<br>в Тюмени</small></a>
   <div class="hdr-r">
     <div class="hdr-phone"><a href="tel:+73452574637" data-phone>+7 (3452) 57-46-37</a><span>● Сейчас принимаем звонки</span></div>
     <button class="btn btn-acc" id="hdrCall" data-modal="call">Перезвоните мне</button>
@@ -581,7 +581,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
     <div><a href="https://atlanttumen.ru/">atlanttumen.ru</a><a href="https://vk.com/stomatlant">ВКонтакте</a><a href="https://atlanttumen.ru/include/licenses_detail.php" target="_blank" rel="noopener" data-privacy>Соглашение на обработку персональных данных</a></div>
     <div>© 2026 Сеть клиник дентальной имплантации «Атлант»</div>
   </div>
-  <a href="#top" class="logo-plate" style="align-self:flex-start;height:56px" aria-label="Наверх"><picture><source srcset="img/logo.webp" type="image/webp"><img src="img/logo.png" width="165" height="40" alt="Стоматология «Атлант»" loading="lazy" style="height:40px"></picture></a>
+  <a href="#top" class="logo-plate" style="align-self:flex-start;height:56px" aria-label="Наверх"><picture><source srcset="img/logo-light.webp" type="image/webp"><img src="img/logo-light.png" width="165" height="40" alt="Стоматология «Атлант»" loading="lazy" style="height:40px"></picture></a>
   <div class="contra">ИМЕЮТСЯ ПРОТИВОПОКАЗАНИЯ. НЕОБХОДИМА КОНСУЛЬТАЦИЯ СПЕЦИАЛИСТА</div>
   <div class="fine">Сайт носит информационный характер и не является публичной офертой (ст. 437 ГК РФ). Условия акции и итоговая стоимость уточняются у администратора.</div>
 </div></footer>

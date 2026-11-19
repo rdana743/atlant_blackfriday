@@ -3,6 +3,9 @@
 #
 #   SITE_DOMAIN=stomat.shop BITRIX_WEBHOOK='https://xxx.bitrix24.ru/rest/1/xxxx/' bash setup.sh
 #
+# Уведомления в Telegram (необязательно, можно добавить позже повторным запуском):
+#   TG_TOKEN='123:ABC' TG_CHAT_ID='-100…' TG_API_ROOT='https://tg-mirror.xxx.workers.dev' SITE_DOMAIN=stomat.shop bash setup.sh
+#
 # Что делает:
 #   • сайт: клонирует репозиторий в /var/www/<домен> и раз в 2 минуты подтягивает изменения из GitHub
 #     (пуш в main → через ≤2 мин изменения на сайте);
@@ -72,6 +75,20 @@ if [ -n "${BITRIX_WEBHOOK:-}" ]; then
   echo "  ✓ вебхук клиента «$CLIENT» сохранён (только на сервере)"
 else
   echo "  BITRIX_WEBHOOK не задан — оставляю текущие настройки"
+fi
+if [ -n "${TG_TOKEN:-}" ] && [ -n "${TG_CHAT_ID:-}" ]; then
+  CLIENT="$CLIENT" TG_TOKEN="$TG_TOKEN" TG_CHAT_ID="$TG_CHAT_ID" TG_API_ROOT="${TG_API_ROOT:-https://api.telegram.org}" CONF="$CONF" "$NODE_BIN" -e '
+    const fs=require("fs"),c=JSON.parse(fs.readFileSync(process.env.CONF,"utf8"));
+    c[process.env.CLIENT]=c[process.env.CLIENT]||{};
+    c[process.env.CLIENT].telegram={token:process.env.TG_TOKEN,chatId:process.env.TG_CHAT_ID,apiRoot:process.env.TG_API_ROOT};
+    fs.writeFileSync(process.env.CONF,JSON.stringify(c,null,2));'
+  echo "  ✓ Telegram для «$CLIENT» настроен (через ${TG_API_ROOT:-api.telegram.org})"
+  code=$(curl -s -m 15 -o /tmp/tg-check.json -w '%{http_code}' -H 'Content-Type: application/json' \
+    -d "{\"chat_id\":\"$TG_CHAT_ID\",\"text\":\"✅ Заявки с $SITE_DOMAIN будут приходить сюда\"}" \
+    "${TG_API_ROOT:-https://api.telegram.org}/bot$TG_TOKEN/sendMessage" || true)
+  [ "$code" = 200 ] && echo "  ✓ тестовое сообщение отправлено в Telegram" \
+    || { echo "  ⚠ Telegram ответил $code: $(head -c 300 /tmp/tg-check.json 2>/dev/null)"; }
+  rm -f /tmp/tg-check.json
 fi
 chown root:huma-leads "$CONF"; chmod 640 "$CONF"
 cat > /etc/systemd/system/huma-leads.service <<EOF

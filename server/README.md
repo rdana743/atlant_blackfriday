@@ -42,3 +42,19 @@ systemctl reload huma-leads                  # перечитать clients.json
 SITE_DOMAIN=новыйдомен.ru CLIENT=bvshd TITLE='БВШД · курсы' REPO=https://github.com/.../landing.git \
 BITRIX_WEBHOOK='https://...' bash setup.sh
 ```
+
+## Уведомления в Telegram
+
+Каждая заявка дублируется сообщением в группу Telegram: телефон (кликабельный), форма, ответы квиза, UTM, ссылка, статус лида в Битриксе (если лид в CRM не создался, это видно сразу) и хэштеги `#заявка #квиз #yandex` для поиска.
+
+С российских VPS `api.telegram.org` работает с перебоями, поэтому запросы идут через **Cloudflare Worker-зеркало** (`worker/tg-mirror.js`). Токен в Worker не хранится, а сам Worker пропускает только ботов из списка `BOT_IDS`.
+
+1. **Бот и группа.** Создать группу, добавить в неё бота, написать любое сообщение. Открыть `https://api.telegram.org/bot<ТОКЕН>/getUpdates` и взять `"chat":{"id":…}`: это `TG_CHAT_ID` (для групп число с минусом).
+2. **Зеркало.** dash.cloudflare.com → Workers & Pages → Create → Worker → Deploy → Edit code → вставить `worker/tg-mirror.js`, в `BOT_IDS` вписать число из начала токена (до двоеточия) → Deploy. Если зеркало уже есть, достаточно добавить ID бота в `BOT_IDS`.
+3. **На сервере:**
+
+```bash
+TG_TOKEN='123:ABC' TG_CHAT_ID='-100…' TG_API_ROOT='https://ЗЕРКАЛО.workers.dev' SITE_DOMAIN=stomat.shop bash setup.sh
+```
+
+Скрипт сохранит настройки на сервере и сразу отправит в группу тестовое сообщение.

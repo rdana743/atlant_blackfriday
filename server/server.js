@@ -9,8 +9,13 @@
  * {
  *   "atlant": {
  *     "webhook": "https://xxx.bitrix24.ru/rest/1/xxxxxxxx/",
- *     "title": "Атлант · Чёрная пятница 11.11",
- *     "origins": ["https://rdana743.github.io"]
+ *     "title": "Атлант · Чёрная пятница",
+ *     "origins": ["https://stomat.shop"],
+ *     "telegram": {                                    // необязательно — уведомления в Telegram
+ *       "token": "123456:ABC…",                       // токен бота от @BotFather
+ *       "chatId": "-100…",                            // id группы для заявок
+ *       "apiRoot": "https://tg-mirror.xxx.workers.dev" // зеркало Bot API в Cloudflare (из РФ api.telegram.org нестабилен)
+ *     }
  *   }
  * }
  *
@@ -89,6 +94,48 @@ async function bitrixAddLead(cfg, lead) {
   return { ok: false, error: 'bitrix_unreachable' };
 }
 
+// ---------- Telegram ----------
+const tgEsc = (v) => String(v == null ? '' : v).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const FORM_TAGS = { quiz: 'квиз', mid: 'форма_середина', final: 'форма_финал' };
+function buildTgText(cfg, d, phone, bitrix) {
+  const form = str(d.source, 60);
+  const formName = FORM_NAMES[form] || form || 'Форма';
+  const tag = FORM_TAGS[form] || (form.startsWith('modal:') ? 'попап_' + form.slice(6) : 'форма');
+  const pretty = phone.replace(/^\+7(\d{3})(\d{3})(\d{2})(\d{2})$/, '+7 ($1) $2-$3-$4');
+  const details = str(d.details, 1500).split('; ').filter(Boolean).map((l) => '• ' + tgEsc(l)).join('\n');
+  const utm = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].filter((k) => d[k]).map((k) => k.slice(4) + ': ' + tgEsc(str(d[k], 120))).join(' · ');
+  return [
+    '🦷 <b>Новая заявка — ' + tgEsc(cfg.title || 'лендинг') + '</b>',
+    '',
+    '📞 <a href="tel:' + phone + '">' + pretty + '</a>',
+    '📝 ' + tgEsc(formName),
+    details || null,
+    d.discount ? '💸 Скидка: ' + tgEsc(str(d.discount, 10)) : null,
+    utm ? '📊 ' + utm : null,
+    d.page ? '🔗 ' + tgEsc(str(d.page, 300)) : null,
+    bitrix.ok ? '✅ Битрикс: лид №' + bitrix.id : '⚠️ <b>В Битрикс НЕ ушла</b> (' + tgEsc(bitrix.error) + ') — позвоните вручную',
+    '',
+    '#заявка #' + tag + (d.utm_source ? ' #' + str(d.utm_source, 40).replace(/[^\wа-яё]/gi, '_') : '')
+  ].filter((l) => l !== null).join('\n');
+}
+async function telegramSend(cfg, text) {
+  const t = cfg.telegram;
+  if (!t || !t.token || !t.chatId) return { ok: false, error: 'not_configured' };
+  const root = (t.apiRoot || 'https://api.telegram.org').replace(/\/+$/, '');
+  const body = JSON.stringify({ chat_id: t.chatId, text, parse_mode: 'HTML', disable_web_page_preview: true });
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const r = await fetch(root + '/bot' + t.token + '/sendMessage', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, signal: AbortSignal.timeout(10000) });
+      const j = await r.json().catch(() => ({}));
+      if (j.ok) return { ok: true };
+      log('error', 'telegram ' + r.status + ' ' + (j.description || ''));
+      if (r.status >= 400 && r.status < 500 && r.status !== 429) return { ok: false, error: j.description || 'HTTP ' + r.status };
+    } catch (e) { log('error', 'telegram request failed (try ' + attempt + '): ' + e.message); }
+    await new Promise((res) => setTimeout(res, 2000 * attempt));
+  }
+  return { ok: false, error: 'telegram_unreachable' };
+}
+
 function buildLead(cfg, d, phone) {
   const form = str(d.source, 60);
   const formName = FORM_NAMES[form] || form || 'Форма';
@@ -152,14 +199,16 @@ const server = http.createServer((req, res) => {
     const phone = normPhone(d.phone);
     if (!phone) return send(res, 422, { ok: false, error: 'phone' }, allowed);
 
-    const lead = buildLead(cfg, d, phone);
-    const rec = { at: new Date().toISOString(), ip, phone, form: str(d.source, 60), details: str(d.details, 1500), utm_source: str(d.utm_source, 100), utm_campaign: str(d.utm_campaign, 200) };
-    const r = await bitrixAddLead(cfg, lead);
-    rec.bitrix = r.ok ? 'lead ' + r.id : 'FAILED ' + r.error;
-    appendLog(client, rec);
-    log(r.ok ? 'info' : 'error', client + ' ' + rec.form + ' → ' + rec.bitrix);
-    // пользователю всегда «ок»: заявка сохранена в журнале, даже если Битрикс не ответил
+    // человеку отвечаем сразу, а Битрикс и Telegram отрабатываем в фоне (с повторами)
     send(res, 200, { ok: true }, allowed);
+    const rec = { at: new Date().toISOString(), ip, phone, form: str(d.source, 60), details: str(d.details, 1500), utm_source: str(d.utm_source, 100), utm_campaign: str(d.utm_campaign, 200) };
+    appendLog(client, Object.assign({ stage: 'received' }, rec));          // заявка уже на диске — не потеряется
+    const r = await bitrixAddLead(cfg, buildLead(cfg, d, phone));
+    rec.bitrix = r.ok ? 'lead ' + r.id : 'FAILED ' + r.error;
+    const tg = cfg.telegram ? await telegramSend(cfg, buildTgText(cfg, d, phone, r)) : { ok: false, error: 'off' };
+    rec.telegram = tg.ok ? 'sent' : tg.error;
+    appendLog(client, Object.assign({ stage: 'done' }, rec));
+    log(r.ok && (tg.ok || tg.error === 'off') ? 'info' : 'error', client + ' ' + rec.form + ' → bitrix: ' + rec.bitrix + ', telegram: ' + rec.telegram);
   });
 });
 

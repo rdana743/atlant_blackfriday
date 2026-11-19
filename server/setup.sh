@@ -135,12 +135,19 @@ ln -sf /etc/nginx/sites-available/$SITE_DOMAIN.conf /etc/nginx/sites-enabled/$SI
 nginx -t && systemctl reload nginx
 
 say "HTTPS-сертификат Let's Encrypt"
-certbot --nginx -n --agree-tos -m "$EMAIL" -d "$SITE_DOMAIN" -d "www.$SITE_DOMAIN" --redirect \
-  || echo "  ⚠ certbot не смог выпустить сертификат — проверьте DNS и что порт 80 открыт"
-# www → без www
-if ! grep -q "return 301 https://$SITE_DOMAIN" /etc/nginx/sites-available/$SITE_DOMAIN.conf; then
-  sed -i "0,/server_name $SITE_DOMAIN www.$SITE_DOMAIN;/s//server_name $SITE_DOMAIN www.$SITE_DOMAIN;\n  if (\$host = www.$SITE_DOMAIN) { return 301 https:\/\/$SITE_DOMAIN\$request_uri; }/" /etc/nginx/sites-available/$SITE_DOMAIN.conf
-  nginx -t && systemctl reload nginx
+CONFF=/etc/nginx/sites-available/$SITE_DOMAIN.conf
+# убрать редирект www, если он остался от прошлой неудачной попытки (мешает проверке сертификата)
+sed -i "/if (\$host = www.$SITE_DOMAIN) { return 301 https:\/\/$SITE_DOMAIN\$request_uri; }/d" "$CONFF"
+nginx -t -q && systemctl reload nginx
+# подождать, если certbot уже чем-то занят (например, плановым продлением)
+for i in $(seq 1 30); do pgrep -x certbot >/dev/null || break; [ $i = 1 ] && echo "  certbot сейчас занят другой задачей — жду…"; sleep 5; done
+CERT_OK=0
+certbot --nginx -n --agree-tos -m "$EMAIL" -d "$SITE_DOMAIN" -d "www.$SITE_DOMAIN" --redirect && CERT_OK=1 \
+  || echo "  ⚠ certbot не смог выпустить сертификат — пришлите вывод выше"
+# www → без www (только когда HTTPS уже есть)
+if [ $CERT_OK = 1 ] && ! grep -q "return 301 https://$SITE_DOMAIN" "$CONFF"; then
+  sed -i "0,/server_name $SITE_DOMAIN www.$SITE_DOMAIN;/s//server_name $SITE_DOMAIN www.$SITE_DOMAIN;\n  if (\$host = www.$SITE_DOMAIN) { return 301 https:\/\/$SITE_DOMAIN\$request_uri; }/" "$CONFF"
+  nginx -t -q && systemctl reload nginx
 fi
 
 say "Проверка"

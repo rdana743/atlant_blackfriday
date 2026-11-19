@@ -58,7 +58,10 @@ if [ -d "$WEB/.git" ]; then
 else rm -rf "$WEB"; git clone -q --depth 1 -b "$BRANCH" "$REPO" "$WEB"; fi
 chown -R www-data:www-data "$WEB"
 echo "  версия сайта: $(git -C "$WEB" log -1 --format='%h %s' | cut -c1-70)"
-cat > /etc/cron.d/site-$SITE_DOMAIN <<EOF
+# имя файла без точек: cron в Debian/Ubuntu игнорирует файлы с точкой в имени
+CRON_FILE="/etc/cron.d/site-${SITE_DOMAIN//./-}"
+rm -f "/etc/cron.d/site-$SITE_DOMAIN"
+cat > "$CRON_FILE" <<EOF
 # автообновление сайта из GitHub раз в 2 минуты
 */2 * * * * www-data cd $WEB && git fetch -q --depth 1 origin $BRANCH && [ "\$(git rev-parse HEAD)" != "\$(git rev-parse origin/$BRANCH)" ] && git reset -q --hard origin/$BRANCH
 EOF

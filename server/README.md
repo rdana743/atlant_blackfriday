@@ -1,38 +1,44 @@
-# huma-leads — заявки с лендинга в Битрикс24
+# Размещение на VPS: лендинг + заявки в Битрикс24
 
-Небольшой сервис на Node.js (без зависимостей): принимает заявки с лендинга и создаёт лиды в Битрикс24 через входящий вебхук клиента.
+Схема на одном домене (например, `stomat.shop`):
 
-- **Вебхук хранится только на сервере** (`/etc/huma-leads/clients.json`), в коде лендинга и в репозитории его нет.
-- Принимает заявки только с разрешённых сайтов (CORS), отсеивает ботов (скрытое поле) и флуд (лимит на IP).
+- `https://stomat.shop/` — сам лендинг. Файлы берутся из этого репозитория и **обновляются автоматически**: раз в 2 минуты сервер подтягивает ветку `main` из GitHub.
+- `https://stomat.shop/api/lead/atlant` — приёмник заявок (`server.js`). Создаёт лид в Битрикс24 через входящий вебхук клиента.
+
+## Безопасность
+
+- Вебхук хранится **только на сервере** (`/etc/huma-leads/clients.json`). В коде лендинга и в репозитории его нет.
+- Заявки принимаются только с разрешённых сайтов, боты отсеиваются скрытым полем, флуд — лимитом на IP (nginx + сервис).
+- Папка `server/`, `.git`, `.md`, `.xlsx` наружу не отдаются.
 - Каждая заявка дублируется в журнал `/var/lib/huma-leads/<клиент>.jsonl`. Если Битрикс не ответил, заявка не потеряется.
-- В лид попадают: телефон, форма-источник, ответы квиза, скидка, страница, UTM-метки (в стандартные поля UTM), yclid/gclid.
+
+## Что попадает в лид
+
+Название лида: «Атлант · Чёрная пятница 11.11 — <форма>». Телефон — в поле телефона. Ответы квиза, выбранная позиция, скидка, страница и referrer — в комментарий. `utm_*` — в стандартные UTM-поля лида, yclid/gclid — в комментарий.
 
 ## Установка
 
-1. В DNS домена `huma.marketing` добавить A-запись: `leads` → IP сервера.
+1. DNS домена: две A-записи на IP сервера — `@` и `www`.
 2. На сервере под root:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/rdana743/atlant_blackfriday/main/server/setup.sh -o setup.sh
-BITRIX_WEBHOOK='https://ВАШ_ПОРТАЛ/rest/ID/КЛЮЧ/' bash setup.sh
+SITE_DOMAIN=stomat.shop BITRIX_WEBHOOK='https://ПОРТАЛ/rest/ID/КЛЮЧ/' bash setup.sh
 ```
 
-Скрипт ставит nginx, certbot и Node.js (если их нет), создаёт systemd-сервис, конфиг nginx и HTTPS-сертификат.
-
-3. В `index.html` в `window.LANDING` указать `endpoint: 'https://leads.huma.marketing/atlant'`.
-
-## Новый клиент
-
-```bash
-CLIENT=bvshd TITLE='БВШД · курсы' ORIGINS='https://britishdesign.ru' BITRIX_WEBHOOK='https://...' bash setup.sh
-```
-
-Адрес для его лендинга: `https://leads.huma.marketing/bvshd`.
+Скрипт ставит nginx, certbot, git и Node.js (если их нет), разворачивает сайт, сервис заявок, HTTPS-сертификат и редирект www → без www. В конце пишет «✓ Всё работает». Повторный запуск безопасен.
 
 ## Полезное
 
 ```bash
-journalctl -u huma-leads -f                 # логи в реальном времени
-tail -n 20 /var/lib/huma-leads/atlant.jsonl # последние заявки
-systemctl reload huma-leads                 # перечитать clients.json без рестарта
+journalctl -u huma-leads -f                  # логи сервиса в реальном времени
+tail -n 20 /var/lib/huma-leads/atlant.jsonl  # последние заявки
+systemctl reload huma-leads                  # перечитать clients.json без рестарта
+```
+
+## Новый клиент на том же сервере
+
+```bash
+SITE_DOMAIN=новыйдомен.ru CLIENT=bvshd TITLE='БВШД · курсы' REPO=https://github.com/.../landing.git \
+BITRIX_WEBHOOK='https://...' bash setup.sh
 ```

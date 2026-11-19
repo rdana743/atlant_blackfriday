@@ -1,61 +1,79 @@
 #!/usr/bin/env bash
-# Установка huma-leads на VPS (Ubuntu/Debian): Node.js-сервис + nginx + HTTPS (Let's Encrypt).
+# Установка лендинга + приёмника заявок на VPS (Ubuntu/Debian).
 #
-# Запуск на сервере под root:
-#   BITRIX_WEBHOOK='https://xxx.bitrix24.ru/rest/1/xxxx/' bash setup.sh
+#   SITE_DOMAIN=stomat.shop BITRIX_WEBHOOK='https://xxx.bitrix24.ru/rest/1/xxxx/' bash setup.sh
 #
-# Повторный запуск безопасен: обновит код и конфиг, вебхук и клиентов не сотрёт.
+# Что делает:
+#   • сайт: клонирует репозиторий в /var/www/<домен> и раз в 2 минуты подтягивает изменения из GitHub
+#     (пуш в main → через ≤2 мин изменения на сайте);
+#   • заявки: сервис huma-leads (Node.js) на /api/lead/<клиент> → лид в Битрикс24;
+#   • nginx + HTTPS (Let's Encrypt), www → без www, сжатие и кэш статики.
+# Повторный запуск безопасен: обновит код и конфиги, вебхук и журнал заявок не тронет.
 set -euo pipefail
 
-DOMAIN="${DOMAIN:-leads.huma.marketing}"
+SITE_DOMAIN="${SITE_DOMAIN:-stomat.shop}"
 CLIENT="${CLIENT:-atlant}"
 TITLE="${TITLE:-Атлант · Чёрная пятница 11.11}"
-ORIGINS="${ORIGINS:-https://rdana743.github.io}"         # через пробел, если сайтов несколько
-EMAIL="${EMAIL:-admin@huma.marketing}"                   # для уведомлений Let's Encrypt
-REPO_RAW="https://raw.githubusercontent.com/rdana743/atlant_blackfriday/main/server"
+ORIGINS="${ORIGINS:-https://$SITE_DOMAIN https://www.$SITE_DOMAIN https://rdana743.github.io}"
+EMAIL="${EMAIL:-admin@huma.marketing}"
+REPO="${REPO:-https://github.com/rdana743/atlant_blackfriday.git}"
+BRANCH="${BRANCH:-main}"
+WEB="/var/www/$SITE_DOMAIN"
 APP=/opt/huma-leads; ETC=/etc/huma-leads; DATA=/var/lib/huma-leads; PORT=8787
 
 say(){ printf '\n\033[1;33m▶ %s\033[0m\n' "$*"; }
 [ "$(id -u)" = 0 ] || { echo "Запустите под root (sudo -i)"; exit 1; }
 
-say "Проверяю DNS: $DOMAIN"
-IP_DNS=$(getent ahostsv4 "$DOMAIN" | awk 'NR==1{print $1}' || true)
+say "Проверяю DNS"
 IP_ME=$(curl -4 -s --max-time 5 https://ifconfig.me || true)
-echo "  $DOMAIN → ${IP_DNS:-не найден}; этот сервер → ${IP_ME:-?}"
-[ -n "$IP_DNS" ] || { echo "  Добавьте A-запись $DOMAIN → $IP_ME и запустите снова."; exit 1; }
+for h in "$SITE_DOMAIN" "www.$SITE_DOMAIN"; do
+  ip=$(getent ahostsv4 "$h" | awk 'NR==1{print $1}' || true)
+  echo "  $h → ${ip:-нет записи}   (этот сервер: ${IP_ME:-?})"
+  [ -n "$ip" ] || { echo "  Добавьте A-запись $h → $IP_ME, подождите 10–30 минут и запустите снова."; exit 1; }
+done
 
-say "Пакеты: nginx, certbot, Node.js"
+say "Пакеты: nginx, certbot, git, Node.js"
 export DEBIAN_FRONTEND=noninteractive
-command -v nginx >/dev/null || { apt-get update -qq; apt-get install -y -qq nginx; }
-command -v certbot >/dev/null || { apt-get update -qq; apt-get install -y -qq certbot python3-certbot-nginx; }
-NODE_MAJOR=$(node -v 2>/dev/null | sed 's/v\([0-9]*\).*/\1/' || echo 0)
-if [ "${NODE_MAJOR:-0}" -lt 18 ]; then
+need=(); for p in nginx certbot git; do command -v $p >/dev/null || need+=($p); done
+if [ ${#need[@]} -gt 0 ]; then
+  apt-get update -qq
+  pk=(); for p in "${need[@]}"; do [ "$p" = certbot ] && pk+=(certbot python3-certbot-nginx) || pk+=($p); done
+  apt-get install -y -qq "${pk[@]}"
+fi
+NODE_MAJOR=$(node -v 2>/dev/null | sed 's/v\([0-9]*\).*/\1/' || true)
+if [ "${NODE_MAJOR:-0}" -lt 18 ] 2>/dev/null || [ -z "$NODE_MAJOR" ]; then
   curl -fsSL https://deb.nodesource.com/setup_22.x | bash - >/dev/null
   apt-get install -y -qq nodejs
 fi
 NODE_BIN=$(command -v node); echo "  node $($NODE_BIN -v)"
 
-say "Код сервиса → $APP"
+say "Сайт → $WEB"
+if [ -d "$WEB/.git" ]; then git -C "$WEB" fetch -q --depth 1 origin "$BRANCH" && git -C "$WEB" reset -q --hard "origin/$BRANCH"
+else rm -rf "$WEB"; git clone -q --depth 1 -b "$BRANCH" "$REPO" "$WEB"; fi
+chown -R www-data:www-data "$WEB"
+cat > /etc/cron.d/site-$SITE_DOMAIN <<EOF
+# автообновление сайта из GitHub раз в 2 минуты
+*/2 * * * * www-data cd $WEB && git fetch -q --depth 1 origin $BRANCH && [ "\$(git rev-parse HEAD)" != "\$(git rev-parse origin/$BRANCH)" ] && git reset -q --hard origin/$BRANCH
+EOF
+echo "  ✓ автообновление из GitHub включено"
+
+say "Сервис заявок huma-leads"
 id huma-leads >/dev/null 2>&1 || useradd --system --no-create-home --shell /usr/sbin/nologin huma-leads
 mkdir -p "$APP" "$ETC" "$DATA"
-if [ -f "$(dirname "$0")/server.js" ]; then cp "$(dirname "$0")/server.js" "$APP/server.js"
-else curl -fsSL "$REPO_RAW/server.js" -o "$APP/server.js"; fi
+if [ -f "$WEB/server/server.js" ]; then cp "$WEB/server/server.js" "$APP/server.js"
+else curl -fsSL https://raw.githubusercontent.com/rdana743/atlant_blackfriday/main/server/server.js -o "$APP/server.js"; fi
 chown -R huma-leads:huma-leads "$DATA"; chmod 700 "$DATA"
-
-say "Клиент «$CLIENT» → $ETC/clients.json"
 CONF="$ETC/clients.json"; [ -f "$CONF" ] || echo '{}' > "$CONF"
 if [ -n "${BITRIX_WEBHOOK:-}" ]; then
   CLIENT="$CLIENT" TITLE="$TITLE" ORIGINS="$ORIGINS" BITRIX_WEBHOOK="$BITRIX_WEBHOOK" CONF="$CONF" "$NODE_BIN" -e '
     const fs=require("fs"),c=JSON.parse(fs.readFileSync(process.env.CONF,"utf8"));
     c[process.env.CLIENT]=Object.assign(c[process.env.CLIENT]||{},{webhook:process.env.BITRIX_WEBHOOK,title:process.env.TITLE,origins:process.env.ORIGINS.split(/\s+/).filter(Boolean)});
     fs.writeFileSync(process.env.CONF,JSON.stringify(c,null,2));'
-  echo "  вебхук сохранён"
+  echo "  ✓ вебхук клиента «$CLIENT» сохранён (только на сервере)"
 else
   echo "  BITRIX_WEBHOOK не задан — оставляю текущие настройки"
 fi
 chown root:huma-leads "$CONF"; chmod 640 "$CONF"
-
-say "systemd-сервис huma-leads"
 cat > /etc/systemd/system/huma-leads.service <<EOF
 [Unit]
 Description=huma-leads: заявки с лендингов → Битрикс24
@@ -77,30 +95,60 @@ WantedBy=multi-user.target
 EOF
 systemctl daemon-reload; systemctl enable -q huma-leads; systemctl restart huma-leads
 
-say "nginx → $DOMAIN"
-cat > /etc/nginx/sites-available/huma-leads.conf <<EOF
-limit_req_zone \$binary_remote_addr zone=huma_leads:1m rate=30r/m;
+say "nginx → $SITE_DOMAIN"
+cat > /etc/nginx/conf.d/huma-leads-zone.conf <<'EOF'
+limit_req_zone $binary_remote_addr zone=huma_leads:1m rate=30r/m;
+EOF
+cat > /etc/nginx/sites-available/$SITE_DOMAIN.conf <<EOF
 server {
   listen 80;
-  server_name $DOMAIN;
-  client_max_body_size 32k;
-  location / {
+  server_name $SITE_DOMAIN www.$SITE_DOMAIN;
+  root $WEB;
+  index index.html;
+  charset utf-8;
+
+  gzip on; gzip_vary on; gzip_min_length 1024;
+  gzip_types text/css application/javascript application/json image/svg+xml;
+
+  # служебное из репозитория наружу не отдаём
+  location ~ /\.            { deny all; return 404; }
+  location ^~ /server/      { deny all; return 404; }
+  location ~ \.(md|xlsx|sh)$ { deny all; return 404; }
+
+  # приёмник заявок
+  location /api/lead/ {
     limit_req zone=huma_leads burst=10 nodelay;
-    proxy_pass http://127.0.0.1:$PORT;
+    client_max_body_size 32k;
+    proxy_pass http://127.0.0.1:$PORT/;
     proxy_set_header Host \$host;
     proxy_set_header X-Real-IP \$remote_addr;
     proxy_read_timeout 30s;
   }
+
+  # статика: шрифты и картинки кэшируются надолго, страница — без кэша
+  location ~* \.(woff2|webp|png|jpg|svg|ico)$ { expires 30d; add_header Cache-Control "public"; try_files \$uri =404; }
+  location = /index.html { add_header Cache-Control "no-cache"; }
+  location / { try_files \$uri \$uri/ =404; }
 }
 EOF
-ln -sf /etc/nginx/sites-available/huma-leads.conf /etc/nginx/sites-enabled/huma-leads.conf
+ln -sf /etc/nginx/sites-available/$SITE_DOMAIN.conf /etc/nginx/sites-enabled/$SITE_DOMAIN.conf
 nginx -t && systemctl reload nginx
 
 say "HTTPS-сертификат Let's Encrypt"
-certbot --nginx -n --agree-tos -m "$EMAIL" -d "$DOMAIN" --redirect || echo "  ⚠ certbot не смог выпустить сертификат — проверьте DNS и порт 80"
+certbot --nginx -n --agree-tos -m "$EMAIL" -d "$SITE_DOMAIN" -d "www.$SITE_DOMAIN" --redirect \
+  || echo "  ⚠ certbot не смог выпустить сертификат — проверьте DNS и что порт 80 открыт"
+# www → без www
+if ! grep -q "return 301 https://$SITE_DOMAIN" /etc/nginx/sites-available/$SITE_DOMAIN.conf; then
+  sed -i "0,/server_name $SITE_DOMAIN www.$SITE_DOMAIN;/s//server_name $SITE_DOMAIN www.$SITE_DOMAIN;\n  if (\$host = www.$SITE_DOMAIN) { return 301 https:\/\/$SITE_DOMAIN\$request_uri; }/" /etc/nginx/sites-available/$SITE_DOMAIN.conf
+  nginx -t && systemctl reload nginx
+fi
 
 say "Проверка"
 sleep 1
-curl -fsS "https://$DOMAIN/health" && echo "  ✓ https://$DOMAIN/$CLIENT готов принимать заявки" || systemctl status huma-leads --no-pager | tail -15
+code_site=$(curl -s -o /dev/null -w '%{http_code}' "https://$SITE_DOMAIN/" || true)
+code_api=$(curl -s -o /dev/null -w '%{http_code}' -X OPTIONS -H "Origin: https://$SITE_DOMAIN" "https://$SITE_DOMAIN/api/lead/$CLIENT" || true)
+echo "  сайт https://$SITE_DOMAIN → $code_site   ·   приёмник заявок → $code_api"
+[ "$code_site" = 200 ] && [ "$code_api" = 204 ] && echo "  ✓ Всё работает: сайт открыт, заявки принимаются" \
+  || { echo "  ⚠ Что-то не так — пришлите этот вывод"; systemctl status huma-leads --no-pager | tail -8; }
 echo
-echo "Журнал заявок: $DATA/$CLIENT.jsonl   ·   Логи сервиса: journalctl -u huma-leads -f"
+echo "Журнал заявок: $DATA/$CLIENT.jsonl   ·   Логи: journalctl -u huma-leads -f"

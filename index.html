@@ -8,6 +8,9 @@
 <meta property="og:title" content="Новые зубы со скидкой −30% · Чёрная пятница 11.11">
 <meta property="og:description" content="Коронки, виниры и протезы в Тюмени по ценам Чёрной пятницы. Бронируйте цену до 11 ноября.">
 <meta name="theme-color" content="#0A0A0C">
+<link rel="canonical" href="https://stomat.shop/">
+<meta property="og:url" content="https://stomat.shop/">
+<meta property="og:image" content="https://stomat.shop/img/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://atlanttumen.ru" crossorigin>
@@ -24,7 +27,7 @@ window.LANDING = {
   slotsLeft: 111,                             // осталось мест — обновляйте вручную
   phone: '+73452574637',
   phoneView: '+7 (3452) 57-46-37',
-  endpoint: '',                               // URL вебхука для заявок (CRM / Bitrix24 / n8n / свой PHP). Пусто = только лог в консоль
+  endpoint: 'https://stomat.shop/api/lead/atlant', // приёмник заявок → Битрикс24 (server/). Пусто = только лог в консоль
   metrikaId: null,                            // ID счётчика Яндекс Метрики, например 12345678
   vkPixelId: null,                            // ID пикселя VK Рекламы (top.mail.ru), например 3512345
   privacyUrl: 'https://atlanttumen.ru/include/licenses_detail.php'  // согласие на обработку ПДн
@@ -726,7 +729,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
     }, utm);
     track('lead', { form: data.source, form_context: data.context || '', discount: D });
     if (!C.endpoint) { console.log('[lead]', payload); return Promise.resolve(); }
-    return fetch(C.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), keepalive: true })
+    return fetch(C.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(payload), keepalive: true })
       .catch(function(){ /* не мешаем пользователю, если вебхук недоступен */ });
   }
 

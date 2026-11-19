@@ -51,9 +51,13 @@ fi
 NODE_BIN=$(command -v node); echo "  node $($NODE_BIN -v)"
 
 say "Сайт → $WEB"
-if [ -d "$WEB/.git" ]; then git -C "$WEB" fetch -q --depth 1 origin "$BRANCH" && git -C "$WEB" reset -q --hard "origin/$BRANCH"
+git config --global --get-all safe.directory 2>/dev/null | grep -qx "$WEB" || git config --global --add safe.directory "$WEB"
+if [ -d "$WEB/.git" ]; then
+  git -C "$WEB" fetch -q --depth 1 origin "$BRANCH" && git -C "$WEB" reset -q --hard "origin/$BRANCH" \
+    || { echo "  ⚠ не удалось обновить сайт из GitHub"; exit 1; }
 else rm -rf "$WEB"; git clone -q --depth 1 -b "$BRANCH" "$REPO" "$WEB"; fi
 chown -R www-data:www-data "$WEB"
+echo "  версия сайта: $(git -C "$WEB" log -1 --format='%h %s' | cut -c1-70)"
 cat > /etc/cron.d/site-$SITE_DOMAIN <<EOF
 # автообновление сайта из GitHub раз в 2 минуты
 */2 * * * * www-data cd $WEB && git fetch -q --depth 1 origin $BRANCH && [ "\$(git rev-parse HEAD)" != "\$(git rev-parse origin/$BRANCH)" ] && git reset -q --hard origin/$BRANCH
@@ -111,6 +115,7 @@ PrivateTmp=true
 WantedBy=multi-user.target
 EOF
 systemctl daemon-reload; systemctl enable -q huma-leads; systemctl restart huma-leads
+grep -q telegramSend "$APP/server.js" && echo "  ✓ обработчик заявок обновлён (Битрикс + Telegram)" || echo "  ⚠ обработчик старой версии"
 
 say "nginx → $SITE_DOMAIN"
 cat > /etc/nginx/conf.d/huma-leads-zone.conf <<'EOF'

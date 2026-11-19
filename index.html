@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Протезирование зубов −30% в Тюмени · Чёрная пятница 11.11 · Стоматология «Атлант»</title>
+<title>Протезирование зубов −30% в Тюмени · Чёрная пятница · Стоматология «Атлант»</title>
 <meta name="description" content="Чёрная пятница в «Атланте»: скидка 30% на коронки, виниры, съёмные и бюгельные протезы. КТ и консультация бесплатно, рассрочка до 24 месяцев. 3 клиники в Тюмени.">
-<meta property="og:title" content="Новые зубы со скидкой −30% · Чёрная пятница 11.11">
-<meta property="og:description" content="Коронки, виниры и протезы в Тюмени по ценам Чёрной пятницы. Бронируйте цену до 11 ноября.">
+<meta property="og:title" content="Новые зубы со скидкой −30% · Чёрная пятница">
+<meta property="og:description" content="Коронки, виниры и протезы в Тюмени по ценам Чёрной пятницы. Бронируйте цену до 30 ноября.">
 <meta name="theme-color" content="#0A0A0C">
 <link rel="canonical" href="https://stomat.shop/">
 <meta property="og:url" content="https://stomat.shop/">
@@ -22,11 +22,11 @@
 /* ===================== НАСТРОЙКИ ===================== */
 window.LANDING = {
   discount: 30,                               // скидка, %
-  deadline: '2026-11-11T23:59:59+05:00',      // конец акции (время Тюмени)
+  deadline: '2026-11-30T23:59:59+05:00',      // конец акции (время Тюмени)
   slotsTotal: 111,                            // всего мест
   slotsLeft: 111,                             // осталось мест — обновляйте вручную
-  phone: '+73452574637',
-  phoneView: '+7 (3452) 57-46-37',
+  phone: '+73452575705',
+  phoneView: '+7 (3452) 57-57-05',
   endpoint: 'https://stomat.shop/api/lead/atlant', // приёмник заявок → Битрикс24 (server/). Пусто = только лог в консоль
   metrikaId: null,                            // ID счётчика Яндекс Метрики, например 12345678
   vkPixelId: null,                            // ID пикселя VK Рекламы (top.mail.ru), например 3512345
@@ -193,7 +193,7 @@ header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:spac
 .pbox div{display:flex;justify-content:space-between;align-items:baseline;font-size:14px}
 .pbox .o{color:#6B6862}.pbox .o s{font-weight:700}
 .pbox .n{margin-top:4px;font-weight:800}
-.pbox .n b{font-family:'Unbounded',sans-serif;font-weight:900;font-size:26px}
+.pbox .n b{white-space:nowrap;font-family:'Unbounded',sans-serif;font-weight:900;font-size:26px}
 .pbox .sv{margin-top:6px;color:var(--acc-d);font-weight:800}
 .pcard .unit{font-size:13px;color:#6B6862}
 .calc{background:var(--dark-ink);color:var(--ink);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:14px}
@@ -348,7 +348,10 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
   .hdr-phone a{font-size:15px}
   #hdrCall{display:none}
   .cmp-row{font-size:13px}.cmp-row div{padding:12px 10px}
-  .sticky-l span{display:none}
+  .sticky-l>span{display:none}
+  .sticky-r .btn{white-space:nowrap;padding:12px 14px;font-size:15px}
+  .topbar .wrap{font-size:12px;gap:2px 14px;padding-top:8px;padding-bottom:8px}.tb-promo{display:none}
+  .chip{font-size:12px;padding:7px 12px}
   .sticky-r{flex:1}.sticky-r .btn{flex:1}
   .stamp{width:72px;height:72px;font-size:15px;right:-4px;top:-18px}.price-tag{padding-right:20px;padding-top:28px}.hero-bg{display:none}.q-opt{min-height:84px;font-size:14px}
 }
@@ -359,16 +362,16 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
 
 <!-- ПЛАШКА СРОЧНОСТИ -->
 <div class="topbar"><div class="wrap">
-  <span>ЧЁРНАЯ ПЯТНИЦА В «АТЛАНТЕ»: −<span data-d></span>% НА ВСЁ ПРОТЕЗИРОВАНИЕ</span>
+  <span class="tb-promo">ЧЁРНАЯ ПЯТНИЦА В «АТЛАНТЕ»: −<span data-d></span>% НА ВСЁ ПРОТЕЗИРОВАНИЕ</span>
   <span><span class="blink" aria-hidden="true"></span>До конца: <span data-t="d"></span> д <span data-t="h"></span>:<span data-t="m"></span>:<span data-t="s"></span></span>
-  <span>Осталось мест: <span data-left></span> из <span data-total></span></span>
+  <span>Мест: <span data-left></span> из <span data-total></span></span>
 </div></div>
 
 <!-- ШАПКА -->
 <header><div class="wrap">
   <a class="logo" href="#top" aria-label="Стоматология «Атлант» — на главную"><span class="logo-plate"><picture><source srcset="img/logo-light.webp" type="image/webp"><img src="img/logo-light.png" width="156" height="38" alt="Стоматология «Атлант»" fetchpriority="high"></picture></span><small class="logo-sub">3 клиники<br>в Тюмени</small></a>
   <div class="hdr-r">
-    <div class="hdr-phone"><a href="tel:+73452574637" data-phone>+7 (3452) 57-46-37</a><span>● Сейчас принимаем звонки</span></div>
+    <div class="hdr-phone"><a href="tel:+73452575705" data-phone>+7 (3452) 57-57-05</a><span>● Сейчас принимаем звонки</span></div>
     <button class="btn btn-acc" id="hdrCall" data-modal="call">Перезвоните мне</button>
   </div>
 </div></header>
@@ -376,10 +379,10 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
 <main id="top">
 <!-- HERO + КВИЗ -->
 <section class="hero" id="quiz">
-  <div class="hero-bg" aria-hidden="true">11.11</div>
+  <div class="hero-bg" aria-hidden="true">−<span data-d></span>%</div>
   <div class="wrap">
     <div class="hero-l">
-      <div class="chip"><i>11.11</i>ТОЛЬКО ДО 11 НОЯБРЯ · ТОЛЬКО <span data-total></span> ПАЦИЕНТОВ</div>
+      <div class="chip"><i>ЧП</i><span>ТОЛЬКО ДО 30 НОЯБРЯ · ТОЛЬКО <span data-total></span> ПАЦИЕНТОВ</span></div>
       <h1 class="h1">Новые зубы<br>со скидкой <em>−<span data-d></span>%</em></h1>
       <p class="lead">Коронки, виниры, съёмные и бюгельные протезы в Тюмени по ценам Чёрной пятницы. Забронируйте цену сейчас — начать лечение можно позже, цена закрепится в договоре.</p>
       <div class="feats">
@@ -431,7 +434,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
         <div class="done-ic"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0A0A0C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></div>
         <h2 style="font-size:26px;font-weight:800;margin-bottom:8px">Скидка <span data-d></span>% закреплена за вами!</h2>
         <p style="margin:0 auto 14px;max-width:420px;color:var(--dmuted)">Куратор свяжется с вами в течение 15 минут в рабочее время и пришлёт 3 варианта сметы.</p>
-        <a href="tel:+73452574637" class="btn btn-dark">Не ждать — позвонить сейчас</a>
+        <a href="tel:+73452575705" class="btn btn-dark">Не ждать — позвонить сейчас</a>
       </div>
       <div class="gifts">
         <p>Ваши подарки открываются с каждым ответом:</p>
@@ -481,7 +484,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
       </div>
       <div class="calc-res">
         <div><span style="color:var(--muted)">Обычная цена</span><s style="color:var(--muted)"><span id="cOld"></span> ₽</s></div>
-        <div><span>Цена 11.11</span><strong style="font-size:18px"><span id="cNew"></span> ₽</strong></div>
+        <div><span>Цена по акции</span><strong style="font-size:18px"><span id="cNew"></span> ₽</strong></div>
         <div class="acc"><span>Вы экономите</span><b><span id="cSave"></span> ₽</b></div>
         <div style="font-size:13px;color:var(--muted)">или от <span id="cMonth"></span> ₽/мес в рассрочку на 12 мес</div>
       </div>
@@ -493,11 +496,11 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
 <!-- СРАВНЕНИЕ -->
 <section class="sec"><div class="wrap" style="max-width:1000px">
   <div class="eyebrow" style="text-align:center">Почему именно сейчас</div>
-  <h2 class="h2" style="text-align:center;margin-left:auto;margin-right:auto;max-width:760px">Записаться до 11.11 или после — разница в деньгах</h2>
+  <h2 class="h2" style="text-align:center;margin-left:auto;margin-right:auto;max-width:760px">Записаться до 30 ноября или после — разница в деньгах</h2>
   <div class="cmp" id="cmp">
-    <div class="cmp-row cmp-head"><div>Что получаете</div><div>После акции</div><div>До 11.11</div></div>
+    <div class="cmp-row cmp-head"><div>Что получаете</div><div>После акции</div><div>До 30.11</div></div>
   </div>
-  <div style="text-align:center;margin-top:28px"><a href="#quiz" class="btn btn-acc btn-lg pulse">Успеть по цене 11.11</a></div>
+  <div style="text-align:center;margin-top:28px"><a href="#quiz" class="btn btn-acc btn-lg pulse">Успеть по цене Чёрной пятницы</a></div>
 </div></section>
 
 <!-- СРЕДНИЙ CTA -->
@@ -541,7 +544,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
 <section class="sec" style="background:var(--bg2);border-top:1px solid var(--line2)"><div class="wrap">
   <h2 class="h2">4 шага до новой улыбки</h2>
   <div class="grid g4">
-    <div class="stp"><i>1</i><b>Бронируете цену</b><span>Оставляете номер до 11.11 — скидка закрепляется за вами</span></div>
+    <div class="stp"><i>1</i><b>Бронируете цену</b><span>Оставляете номер до 30 ноября — скидка закрепляется за вами</span></div>
     <div class="stp"><i>2</i><b>Диагностика — 0 ₽</b><span>Осмотр ортопеда и КТ-снимок в удобном филиале</span></div>
     <div class="stp"><i>3</i><b>План и договор</b><span>3 варианта на выбор, цена фиксируется в договоре</span></div>
     <div class="stp"><i>4</i><b>Новые зубы</b><span>Изготовление и установка конструкции, гарантия на работу</span></div>
@@ -561,7 +564,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
 <section class="final"><div class="wrap">
   <div class="final-l">
     <div class="eyebrow">Последний шанс</div>
-    <h2>11.11 цены вернутся к обычным</h2>
+    <h2>1 декабря цены вернутся к обычным</h2>
     <p>Осталось <strong style="color:var(--acc)"><span data-left></span> мест из <span data-total></span></strong>. Оставьте номер — закрепим скидку <span data-d></span>% и бесплатную диагностику за вами.</p>
     <div class="timer big"><div><b data-t="d"></b><small>дней</small></div><div><b data-t="h"></b><small>часов</small></div><div><b data-t="m"></b><small>минут</small></div><div><b data-t="s"></b><small>секунд</small></div></div>
     <div class="addr"><span>ул. Котельщиков, 2</span><span>ул. Монтажников, 13 Б/2</span><span>Московский тракт, 179 к. 2</span></div>
@@ -577,7 +580,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
       <div class="agree">Нажимая кнопку, вы даёте <a href="https://atlanttumen.ru/include/licenses_detail.php" target="_blank" rel="noopener" data-privacy>согласие на обработку персональных данных</a></div>
     </form>
     <div class="hide" data-ok><div class="t" style="margin-bottom:8px">Скидка закреплена!</div><div style="color:var(--dmuted)">Куратор свяжется с вами в течение 15 минут в рабочее время.</div></div>
-    <div class="call">Или позвоните: <a href="tel:+73452574637" data-phone>+7 (3452) 57-46-37</a></div>
+    <div class="call">Или позвоните: <a href="tel:+73452575705" data-phone>+7 (3452) 57-57-05</a></div>
   </div>
 </div></section>
 </main>
@@ -600,9 +603,9 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
 
 <!-- ЛИПКАЯ ПАНЕЛЬ -->
 <div class="sticky"><div class="wrap">
-  <div class="sticky-l"><i>−<span data-d></span>%</i><span><strong>до 11.11</strong> · осталось <span data-t="d"></span> д <span data-t="h"></span>:<span data-t="m"></span>:<span data-t="s"></span></span></div>
+  <div class="sticky-l"><i>−<span data-d></span>%</i><span><strong>до 30.11</strong> · осталось <span data-t="d"></span> д <span data-t="h"></span>:<span data-t="m"></span>:<span data-t="s"></span></span></div>
   <div class="sticky-r">
-    <a href="tel:+73452574637" class="ic-btn" aria-label="Позвонить" data-phone-href><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"/></svg></a>
+    <a href="tel:+73452575705" class="ic-btn" aria-label="Позвонить" data-phone-href><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"/></svg></a>
     <button class="btn btn-acc" data-modal="book">Забронировать скидку</button>
   </div>
 </div></div>
@@ -687,7 +690,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
   if (C.privacyUrl) $$('[data-privacy]').forEach(function(a){ a.href = C.privacyUrl; });
   $('#maxSave').textContent = fmt(37500 - price(37500));
 
-  var tick = ['11.11 · −'+D+'% НА ПРОТЕЗИРОВАНИЕ','★','КТ И КОНСУЛЬТАЦИЯ 0 ₽','★','РАССРОЧКА ДО 24 МЕС','★','ЦЕНА ФИКСИРУЕТСЯ В ДОГОВОРЕ','★','ВЕРНЁМ 13% НАЛОГОВЫМ ВЫЧЕТОМ','★'];
+  var tick = ['ЧЁРНАЯ ПЯТНИЦА · −'+D+'% НА ПРОТЕЗИРОВАНИЕ','★','КТ И КОНСУЛЬТАЦИЯ 0 ₽','★','РАССРОЧКА ДО 24 МЕС','★','ЦЕНА ФИКСИРУЕТСЯ В ДОГОВОРЕ','★','ВЕРНЁМ 13% НАЛОГОВЫМ ВЫЧЕТОМ','★'];
   $('#ticker').innerHTML = tick.concat(tick).map(function(t){ return '<span>'+t+'</span>'; }).join('');
 
   /* ---------- таймер ---------- */
@@ -752,8 +755,8 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
   var modal = $('#modal'), mForm = $('form', modal), mOk = $('[data-ok]', modal), lastFocus = null;
   var PRESETS = {
     call: ['Бесплатно', 'Перезвоним за 15 минут', 'Ответим на вопросы, подберём удобный филиал и закрепим за вами скидку '+D+'%.', 'Перезвоните мне'],
-    book: ['Чёрная пятница · 11.11', 'Забронируйте скидку −'+D+'%', 'Скидка закрепится за вашим номером. В подарок: КТ, консультация ортопеда и план лечения.', 'Забронировать скидку'],
-    exit: ['Подождите!', 'Не уходите без своей скидки −'+D+'%', 'Оставьте номер — пришлём расчёт стоимости, чтобы было с чем сравнить. Скидка сохранится до 11.11.', 'Сохранить скидку']
+    book: ['Чёрная пятница · до 30.11', 'Забронируйте скидку −'+D+'%', 'Скидка закрепится за вашим номером. В подарок: КТ, консультация ортопеда и план лечения.', 'Забронировать скидку'],
+    exit: ['Подождите!', 'Не уходите без своей скидки −'+D+'%', 'Оставьте номер — пришлём расчёт стоимости, чтобы было с чем сравнить. Скидка сохранится до 30 ноября.', 'Сохранить скидку']
   };
   function openModal(p, ctx, src){
     modalCtx = ctx || p[1]; modalSrc = src || ctx || 'modal';
@@ -804,13 +807,13 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
   var html = items.map(function(it, i){
     var n = price(it[2]);
     return '<div class="pcard card-h"><div class="off">−'+D+'%</div><span class="tag">'+it[4]+'</span><h3>'+it[0]+'</h3><p>'+it[1]+'</p>'+
-      '<div class="pbox"><div class="o"><span>Обычная цена</span><s>'+fmt(it[2])+' ₽</s></div><div class="n"><span>Цена 11.11</span><b>'+fmt(n)+' ₽</b></div><div class="sv"><span>Экономия</span><span>'+fmt(it[2]-n)+' ₽</span></div></div>'+
+      '<div class="pbox"><div class="o"><span>Обычная цена</span><s>'+fmt(it[2])+' ₽</s></div><div class="n"><span>По акции</span><b>'+fmt(n)+' ₽</b></div><div class="sv"><span>Экономия</span><span>'+fmt(it[2]-n)+' ₽</span></div></div>'+
       '<div class="unit">'+it[3]+' · от '+fmt(Math.ceil(n/12))+' ₽/мес в рассрочку</div><button type="button" class="btn btn-acc" data-item="'+i+'">Забронировать эту цену</button></div>';
   }).join('');
   $('#calc').insertAdjacentHTML('beforebegin', html);
   $('#priceGrid').addEventListener('click', function(e){
     var b = e.target.closest('[data-item]'); if (!b) return; var it = items[+b.dataset.item], n = fmt(price(it[2]));
-    openModal(['Цена 11.11: '+n+' ₽', it[0]+' за '+n+' ₽', 'Оставьте номер — закрепим цену Чёрной пятницы за вами. Начать лечение можно позже.', 'Забронировать за '+n+' ₽'], 'Прайс: '+it[0], 'price');
+    openModal(['Цена Чёрной пятницы: '+n+' ₽', it[0]+' за '+n+' ₽', 'Оставьте номер — закрепим цену Чёрной пятницы за вами. Начать лечение можно позже.', 'Забронировать за '+n+' ₽'], 'Прайс: '+it[0], 'price');
   });
 
   /* ---------- калькулятор ---------- */
@@ -894,7 +897,7 @@ main>section:not(.hero),footer{content-visibility:auto;contain-intrinsic-size:au
 
   /* ---------- FAQ ---------- */
   var faq = [
-    ['Можно забронировать цену сейчас, а лечиться позже?','Да. Оставьте номер до 11 ноября — скидка закрепится за вами. На консультации врач составит план, и стоимость будет зафиксирована в договоре до конца лечения.'],
+    ['Можно забронировать цену сейчас, а лечиться позже?','Да. Оставьте номер до 30 ноября — скидка закрепится за вами. На консультации врач составит план, и стоимость будет зафиксирована в договоре до конца лечения.'],
     ['Есть ли рассрочка?','Да, клиника предлагает рассрочку на 6, 12 или 24 месяца. Условия куратор расскажет при записи.'],
     ['Что входит в бесплатную консультацию?','Осмотр врача, КТ-снимок и подробный план лечения — для всех пациентов клиники это бесплатно.'],
     ['Можно ли вернуть налог?','Да, оформим документы и поможем вернуть налоговый вычет 13% с оплаченной стоимости лечения.'],

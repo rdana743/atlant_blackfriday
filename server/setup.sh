@@ -13,7 +13,7 @@ set -euo pipefail
 
 SITE_DOMAIN="${SITE_DOMAIN:-stomat.shop}"
 CLIENT="${CLIENT:-atlant}"
-TITLE="${TITLE:-Атлант · Чёрная пятница 11.11}"
+TITLE="${TITLE:-Атлант · Чёрная пятница}"
 ORIGINS="${ORIGINS:-https://$SITE_DOMAIN https://www.$SITE_DOMAIN https://rdana743.github.io}"
 EMAIL="${EMAIL:-admin@huma.marketing}"
 REPO="${REPO:-https://github.com/rdana743/atlant_blackfriday.git}"
